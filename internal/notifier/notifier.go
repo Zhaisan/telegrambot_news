@@ -18,7 +18,7 @@ import (
 
 type ArticleProvider interface {
 	AllNotPosted(ctx context.Context, since time.Time, limit uint64) ([]model.Article, error)
-	MarkPosted(ctx context.Context, id int64) error
+	MarkAsPosted(ctx context.Context, article model.Article) error
 }
 
 type Summarizer interface {
@@ -73,7 +73,7 @@ func (n *Notifier) SelectAndSendArticle(ctx context.Context) error {
 		return err
 	}
 
-	return n.articles.MarkPosted(ctx, article.ID)
+	return n.articles.MarkAsPosted(ctx, article)
 }
 
 func (n *Notifier) extractSummary(ctx context.Context, article model.Article) (string, error) {
